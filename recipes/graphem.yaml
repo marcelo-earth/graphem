@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nasa/openmct-build/master/src/assets/openmct-configuration-schema.json
+#
+# Open MCT Build Tool recipe for Graphem.
+#
+#   mct build --recipe recipes/graphem.yaml -i graphem-demo
+#   npx http-server instances/graphem-demo -o
+#
+# Adjust the options below to match your GraphQL server and your dictionary.json.
+# The dictionary file has to be reachable from the instance root, so copy it into
+# instances/<instance-name>/ before serving, or point dictionaryPath at a URL.
+openmct:
+  version: stable
+  plugins:
+    - openmct.plugins.LocalStorage
+    - openmct.plugins.MyItems
+    - openmct.plugins.Espresso
+    - graphem:
+        options:
+          namespace: rocket.taxonomy
+          key: orion
+          dictionaryPath: /dictionary.json
+          telemetryName: rocket.telemetry
+          subscriptionName: formatted
+          urn: localhost:4000/graphql
+          debug: false
