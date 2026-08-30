@@ -120,6 +120,61 @@ openmct.install(Graphem({
 openmct.start();
 ```
 
+### 🧰 Install with the Open MCT Build Tool
+
+[`mct`](https://github.com/nasa/openmct-build) is NASA's command line tool for building a packaged Open MCT deployment. Graphem ships as a plugin that `mct` can install and configure, so you do not have to wire the `<script>` tag and the `openmct.install` call by hand.
+
+Build an instance and add Graphem to it:
+
+```bash
+mct build -i graphem-demo
+mct plugins add graphem -i graphem-demo --options '{
+  "namespace": "rocket.taxonomy",
+  "key": "orion",
+  "dictionaryPath": "/dictionary.json",
+  "telemetryName": "rocket.telemetry",
+  "subscriptionName": "formatted",
+  "urn": "localhost:4000/graphql"
+}'
+```
+
+Or build everything in one step from the recipe included in this repository:
+
+```bash
+mct build --recipe recipes/graphem.yaml -i graphem-demo
+```
+
+Either way the configuration lands in `instances/graphem-demo/instance.yaml`, where it can be edited directly:
+
+```yaml
+openmct:
+  version: stable
+  plugins:
+    - openmct.plugins.LocalStorage
+    - openmct.plugins.MyItems
+    - graphem:
+        options:
+          namespace: rocket.taxonomy
+          key: orion
+          dictionaryPath: /dictionary.json
+          telemetryName: rocket.telemetry
+          subscriptionName: formatted
+          urn: localhost:4000/graphql
+```
+
+Copy your `dictionary.json` into the instance directory so that `dictionaryPath` resolves, then preview the build:
+
+```bash
+cp dictionary.json instances/graphem-demo/
+npx http-server instances/graphem-demo -o
+```
+
+Reconfiguring later does not require a rebuild of the whole instance:
+
+```bash
+mct plugins configure graphem --options '{"urn": "telemetry.example.com/graphql"}' -i graphem-demo
+```
+
 ### 🛰 Create a GraphQL server
 
 In order to use Graphem correctly you can use the server template that we provide.

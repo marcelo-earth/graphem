@@ -2,10 +2,11 @@
   "name": "graphem",
   "version": "2.0.4",
   "description": "Connector to integrate GraphQL to NASA OpenMCT in queries and subscriptions",
-  "main": "src/index.js",
+  "main": "dist/index.js",
+  "type": "commonjs",
   "types": "dist/index.d.ts",
   "files": [
-    "/dist"
+    "dist"
   ],
   "scripts": {
     "clean": "rimraf ./dist ./node_modules ./package-lock.json",
@@ -46,6 +47,14 @@
   "dependencies": {
     "graphql": "16.6.0",
     "graphql-ws": "5.11.1"
+  },
+  "peerDependencies": {
+    "openmct": ">=2.1.2"
+  },
+  "peerDependenciesMeta": {
+    "openmct": {
+      "optional": true
+    }
   },
   "repository": {
     "type": "git",
